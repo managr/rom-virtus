@@ -4,7 +4,7 @@ require 'virtus'
 module ROM
   class Setup
     def from_virtus(virtus_model)
-      name = Inflecto.pluralize(Inflecto.underscore(virtus_model.name.to_s)).to_sym
+      name = relation_name(virtus_model)
       attributes = virtus_model.attribute_set
 
       schema do
@@ -24,6 +24,10 @@ module ROM
           model virtus_model
         end
       end
+    end
+
+    def relation_name(model)
+      Inflecto.pluralize(Inflecto.underscore(model.name.to_s)).to_sym
     end
   end
 end
