@@ -27,7 +27,7 @@ module ROM
     end
 
     def relation_name(model)
-      Inflecto.pluralize(Inflecto.underscore(model.name.to_s)).to_sym
+      Inflecto.tableize(model).to_sym
     end
   end
 end
