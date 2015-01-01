@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe 'Setup ROM from Virtus models' do
+  subject(:rom) { setup.finalize }
+
+  let(:setup) { ROM.setup("memory://localhost/test") }
+
   it 'works' do
     class User
       include Virtus.value_object
@@ -12,17 +16,14 @@ describe 'Setup ROM from Virtus models' do
       end
     end
 
-    setup = ROM.setup("memory://localhost/test")
-
     setup.from_virtus(User)
-
-    rom = setup.finalize
 
     expect(rom.relations.users).not_to be(nil)
 
-    rom.schema.users << { id: 1, name: 'Piotr', age: 31 }
+    tuple = { id: 1, name: 'Piotr', age: 31 }
+    user = User.new(tuple)
 
-    user = User.new(id: 1, name: 'Piotr', age: 31)
+    rom.schema.users << tuple
 
     expect(rom.read(:users)).to match_array([user])
   end
